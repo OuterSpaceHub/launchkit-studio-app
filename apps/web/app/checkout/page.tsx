@@ -1,10 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabaseClient';
 
 export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      const { data } = await supabase.auth.getSession();
+      if (!mounted) return;
+      setUserId(data.session?.user?.id ?? null);
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   async function handleCheckout() {
     setLoading(true);
@@ -13,6 +28,7 @@ export default function CheckoutPage() {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId }),
       });
       if (!res.ok) throw new Error('Failed to create checkout session');
       const data = await res.json();

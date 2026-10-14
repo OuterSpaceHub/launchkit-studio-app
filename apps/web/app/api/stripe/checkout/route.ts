@@ -15,7 +15,11 @@ const stripe = new Stripe(stripeSecret, { apiVersion: '2024-08-15' });
 
 export async function POST(req: Request) {
   try {
+    const body = await req.json();
+    const { userId } = body || {};
+
     const origin = req.headers.get('origin') || 'http://localhost:3000';
+
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       line_items: [
@@ -24,6 +28,7 @@ export async function POST(req: Request) {
           quantity: 1,
         },
       ],
+      client_reference_id: userId ?? undefined,
       success_url: `${origin}/?success=true`,
       cancel_url: `${origin}/?canceled=true`,
     });
