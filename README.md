@@ -1,62 +1,22 @@
-# LaunchKit Studio App
+## Local setup (Supabase + Stripe)
 
-This repository contains a production-style starter for two monetizable products:
+1. Copy .env.local.example to `.env.local` and fill in values from your Supabase and Stripe dashboard.
 
-1. LaunchKit SaaS MVP
-   - A landing page builder SaaS for founders and creators
-   - Includes marketing pages, pricing, and a dashboard prototype
-2. LaunchKit Digital Product Bundle
-   - A packaged digital asset set for founders selling templates and kits
+2. Create a Supabase project and enable Email auth (Magic link) in the Authentication settings.
 
-## Project structure
+3. Create a Stripe product and price (recurring) and set STRIPE_PRICE_ID to the price ID.
 
-- `apps/web` - Next.js SaaS frontend
-- `products/launchkit-bundle` - digital product package, sample content, and sales materials
-- `README.md` - project overview
-
-## Quick start
+4. Install dependencies and run the dev server:
 
 ```bash
 npm install
-npm run dev
+npm run dev --workspace=apps/web
 ```
 
-Open `http://localhost:3000`.
+5. (Optional) Set up Stripe CLI to forward webhooks:
 
-## SaaS product idea
+```bash
+stripe listen --forward-to "http://localhost:3000/api/stripe/webhook"
+```
 
-LaunchKit helps founders create polished landing pages without design or dev help. The MVP focuses on:
-
-- landing page generation from a brief
-- reusable templates
-- page preview and export
-- subscriptions and Stripe-ready billing
-
-## Digital product idea
-
-The digital product bundle includes launch assets such as:
-
-- landing page templates
-- homepage section blocks
-- email-ready copy
-- product positioning notes
-- a starter sales pitch
-
-## Stack
-
-- Next.js
-- TypeScript
-- Tailwind CSS
-- Supabase-ready database structure
-- Stripe-ready pricing notes
-
-## Next steps
-
-- Add auth and database
-- Connect Stripe checkout
-- Build actual page-generation logic
-- Publish the bundle on Gumroad or Shopify
-
-## License
-
-MIT
+Replace the webhook secret in your `.env.local` with the value printed by the CLI.
