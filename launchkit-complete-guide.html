@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LaunchKit Complete Guide</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: #121a2b;
+        --panel-2: #1a2438;
+        --text: #edf3ff;
+        --muted: #b8c4dd;
+        --brand: #6d7cff;
+        --brand-2: #8b5cf6;
+        --success: #22c55e;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --border: #2c3a52;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(180deg, #0b1020 0%, #101827 100%);
+        color: var(--text);
+        line-height: 1.6;
+      }
+      .page {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 48px 20px 80px;
+      }
+      h1, h2, h3 { margin-top: 0; }
+      h1 {
+        font-size: 2.4rem;
+        margin-bottom: 12px;
+      }
+      h2 {
+        font-size: 1.6rem;
+        margin-top: 32px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 8px;
+      }
+      h3 {
+        font-size: 1.1rem;
+        margin-top: 20px;
+        color: #dfe8ff;
+      }
+      p, li {
+        color: var(--muted);
+        font-size: 0.98rem;
+      }
+      ul, ol {
+        padding-left: 20px;
+      }
+      code, pre {
+        font-family: Consolas, "Liberation Mono", Menlo, monospace;
+      }
+      code {
+        background: rgba(255,255,255,0.06);
+        color: #dfe9ff;
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+      pre {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+        color: #ebf2ff;
+        overflow-x: auto;
+      }
+      .card {
+        background: rgba(18, 26, 43, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 20px 22px;
+        margin-top: 18px;
+      }
+      .pill {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(109, 124, 255, 0.12);
+        color: #dfe8ff;
+        border: 1px solid rgba(109,124,255,0.35);
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        background: rgba(18,26,43,0.8);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      th, td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      th {
+        background: rgba(255,255,255,0.02);
+        color: #f7f9ff;
+      }
+      .note {
+        background: rgba(109,124,255,0.1);
+        border: 1px solid rgba(109,124,255,0.32);
+        border-radius: 12px;
+        padding: 14px 16px;
+        color: #edf3ff;
+      }
+      .footer {
+        margin-top: 40px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        text-align: center;
+      }
+      @media print {
+        body {
+          background: white;
+          color: #111827;
+        }
+        .page {
+          max-width: 100%;
+          padding: 0;
+        }
+        .card, table, pre, .note {
+          box-shadow: none;
+        }
+        .page > * {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="pill">LaunchKit Complete Guide</div>
+      <h1>LaunchKit Studio App</h1>
+      <p>This document collects the app setup, deployment checklist, SaaS guide, digital product plan, and launch instructions in one place.</p>
+
+      <div class="card">
+        <h2>1) What this project is</h2>
+        <p>This repo contains a production-style starter for two monetizable products:</p>
+        <ul>
+          <li><strong>SaaS MVP:</strong> LaunchKit page builder for founders and startups.</li>
+          <li><strong>Digital product bundle:</strong> launch assets and templates that can be sold separately.</li>
+        </ul>
+        <p>The app includes:</p>
+        <ul>
+          <li>landing-page marketing site</li>
+          <li>page builder/editor</li>
+          <li>dashboard with saved pages</li>
+          <li>public pages at /[slug]</li>
+          <li>Stripe checkout and billing scaffolding</li>
+          <li>digital bundle in <code>products/launchkit-bundle</code></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>2) Product strategy</h2>
+
+        <h3>2.1 SaaS MVP idea</h3>
+        <p>LaunchKit helps founders turn ideas into polished launch pages without design friction.</p>
+        <ul>
+          <li>Build pages from reusable blocks</li>
+          <li>Preview changes instantly</li>
+          <li>Publish a live page with its own slug</li>
+          <li>Manage subscription billing</li>
+        </ul>
+
+        <h3>2.2 Digital product bundle</h3>
+        <p>The digital product bundle can be sold separately on Gumroad, Shopify, or your own storefront.</p>
+        <ul>
+          <li>landing-page templates</li>
+          <li>messaging notes</li>
+          <li>sales copy</li>
+          <li>product template bundle</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>3) Project structure</h2>
+        <pre>.
+├── apps/
+│   └── web/
+│       ├── app/
+│       ├── lib/
+│       └── package.json
+├── products/
+│   └── launchkit-bundle/
+├── supabase/
+│   └── migrations/
+├── .env.local.example
+├── .gitignore
+├── README.md
+├── README_ENV_NOTES.md
+├── DEPLOYMENT_CHECKLIST.md
+├── .vercel.env.example
+├── launchkit-complete-guide.html
+└── package.json</pre>
+      </div>
+
+      <div class="card">
+        <h2>4) Local setup</h2>
+        <h3>Install</h3>
+        <pre>npm install
+npm run dev --workspace=apps/web</pre>
+
+        <h3>Open routes</h3>
+        <ul>
+          <li><code>http://localhost:3000</code></li>
+          <li><code>http://localhost:3000/editor</code></li>
+          <li><code>http://localhost:3000/dashboard</code></li>
+          <li><code>http://localhost:3000/auth</code></li>
+          <li><code>http://localhost:3000/checkout</code></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>5) Required environment variables</h2>
+        <pre>NEXT_PUBLIC_SUPABASE_URL=https://&lt;project-ref&gt;.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=&lt;supabase-anon-key&gt;
+SUPABASE_SERVICE_ROLE_KEY=&lt;supabase-service-role-key&gt;
+
+STRIPE_SECRET_KEY=sk_live_xxx
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_xxx
+STRIPE_PRICE_ID=price_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx</pre>
+        <div class="note">
+          Keep service-role and secret keys server-only. Do not expose them in client code or public files.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>6) Supabase setup</h2>
+        <ol>
+          <li>Create a Supabase project.</li>
+          <li>Go to <strong>Project Settings → API</strong>.</li>
+          <li>Copy Project URL and anon key.</li>
+          <li>Copy service role key.</li>
+          <li>Run the SQL migration files:</li>
+        </ol>
+        <pre>supabase/migrations/001_init.sql
+supabase/migrations/002_rls.sql</pre>
+
+        <h3>Tables created</h3>
+        <table>
+          <thead>
+            <tr><th>Table</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>customers</td><td>Map Supabase users to Stripe customers</td></tr>
+            <tr><td>subscriptions</td><td>Track recurring billing state</td></tr>
+            <tr><td>pages</td><td>Store page blocks and published state</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>7) Stripe setup</h2>
+        <ol>
+          <li>Create a product in Stripe Dashboard.</li>
+          <li>Create a recurring price.</li>
+          <li>Copy the price ID into <code>STRIPE_PRICE_ID</code>.</li>
+          <li>Copy the secret/public keys into the env vars.</li>
+          <li>Create a webhook endpoint:</li>
+        </ol>
+        <pre>https://&lt;your-vercel-domain&gt;/api/stripe/webhook</pre>
+
+        <p>Listen for:</p>
+        <ul>
+          <li><code>checkout.session.completed</code></li>
+          <li><code>customer.subscription.created</code></li>
+          <li><code>customer.subscription.updated</code></li>
+          <li><code>customer.subscription.deleted</code></li>
+          <li><code>invoice.paid</code></li>
+          <li><code>invoice.payment_failed</code></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>8) Deployment checklist (Vercel)</h2>
+        <ol>
+          <li>Connect the repo to Vercel.</li>
+          <li>Import the GitHub repo.</li>
+          <li>Set framework to Next.js.</li>
+          <li>Add env variables in Vercel Project Settings → Environment Variables.</li>
+          <li>Deploy from <code>main</code>.</li>
+          <li>Verify the app loads.</li>
+          <li>Validate auth, page save, public slug route, and checkout flow.</li>
+        </ol>
+
+        <h3>Recommended domain flow</h3>
+        <ul>
+          <li>Use a Vercel domain initially</li>
+          <li>Then connect a custom domain</li>
+          <li>Use HTTPS automatically provided by Vercel</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>9) How the page builder works</h2>
+        <ol>
+          <li>Open <code>/editor</code>.</li>
+          <li>Add blocks: hero, features, CTA.</li>
+          <li>Edit each block’s content.</li>
+          <li>Preview changes in the live preview panel.</li>
+          <li>Save content to the database.</li>
+          <li>Toggle “Publish live” and save.</li>
+          <li>Open the page from the dashboard or via <code>/{slug}</code>.</li>
+        </ol>
+
+        <p>Published pages render through the public route <code>/[slug]</code>.</p>
+      </div>
+
+      <div class="card">
+        <h2>10) Billing flow</h2>
+        <p>The project includes:</p>
+        <ul>
+          <li><code>/checkout</code> page for subscription start</li>
+          <li>stripe checkout endpoint</li>
+          <li>webhook handler to update customer and subscription records</li>
+          <li><code>/settings</code> page for customer billing portal access</li>
+        </ul>
+
+        <p>When Stripe sends the checkout completed event, the app attempts to write the customer/subscription records into Supabase.</p>
+      </div>
+
+      <div class="card">
+        <h2>11) Digital product sales guide</h2>
+        <h3>Best monetization path</h3>
+        <ul>
+          <li>Sell the digital bundle on Gumroad first for speed.</li>
+          <li>Use Shopify if you want a storefront and more control.</li>
+          <li>Use your own landing page + Stripe if you want a custom solution.</li>
+        </ul>
+
+        <h3>Suggested pricing</h3>
+        <table>
+          <thead>
+            <tr><th>Offer</th><th>Suggested price</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Starter bundle</td><td>$29</td></tr>
+            <tr><td>Complete pack</td><td>$79</td></tr>
+            <tr><td>Bundle + updates</td><td>$129</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Packaging checklist</h3>
+        <ul>
+          <li>zip the template files</li>
+          <li>include a clear README and license</li>
+          <li>add screenshots and demo preview</li>
+          <li>describe use-cases and buyer problems</li>
+          <li>include delivery email or onboarding note</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>12) Recommended next launch sequence</h2>
+        <ol>
+          <li>Set up Supabase and Stripe.</li>
+          <li>Run migrations and set env vars.</li>
+          <li>Deploy to Vercel.</li>
+          <li>Verify auth, page save, and public route.</li>
+          <li>Test checkout using Stripe test card <code>4242 4242 4242 4242</code>.</li>
+          <li>Publish one sample page to /demo or /launchkit-demo.</li>
+          <li>List the digital bundle on Gumroad or Shopify.</li>
+          <li>Share screenshots and links to product communities.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h2>13) Security notes</h2>
+        <ul>
+          <li>Never expose service role keys in browser code.</li>
+          <li>Use RLS policies in Supabase.</li>
+          <li>Validate webhook requests with Stripe signatures.</li>
+          <li>Do not ship with broad public database access.</li>
+          <li>Check logs in Vercel and Stripe regularly.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>14) Must-have commands</h2>
+        <pre>npm install
+npm run dev --workspace=apps/web
+
+stripe login
+stripe listen --forward-to "http://localhost:3000/api/stripe/webhook"
+
+# Vercel deployment from git push to main</pre>
+      </div>
+
+      <div class="card">
+        <h2>15) Final recommendation</h2>
+        <p>Use this repo as a real founder-facing SaaS MVP, then sell the digital bundle as a second income stream while you validate customer demand. This is a strong product stack for an early-stage startup or indie business.</p>
+      </div>
+
+      <div class="footer">
+        Generated for LaunchKit Studio App — ready for PDF export via browser Print → Save as PDF
+      </div>
+    </div>
+  </body>
+</html>
