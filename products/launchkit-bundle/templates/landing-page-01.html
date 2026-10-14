@@ -1,0 +1,91 @@
+<html>
+  <head>
+    <title>LaunchKit Landing Page</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: #f8fafc;
+      }
+      .container {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 60px 20px;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 40px;
+        align-items: center;
+      }
+      h1 {
+        font-size: 48px;
+        line-height: 1.1;
+        margin: 0 0 20px;
+      }
+      p {
+        font-size: 18px;
+        color: #cbd5e1;
+      }
+      .cta {
+        margin-top: 24px;
+        display: inline-block;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: white;
+        padding: 16px 28px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .card {
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid #334155;
+        border-radius: 18px;
+        padding: 28px;
+      }
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+      }
+      .metric {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 12px;
+        padding: 20px;
+      }
+      .metric strong {
+        display: block;
+        font-size: 30px;
+        margin-bottom: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <section class="hero">
+        <div>
+          <div style="display:inline-block;padding:8px 14px;border:1px solid rgba(79,70,229,0.6);background:rgba(79,70,229,0.1);border-radius:999px;color:#c7d2fe;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;">Built for founders</div>
+          <h1>Launch your startup page in a weekend.</h1>
+          <p>LaunchKit gives you polished startup sections, product messaging, and conversion-focused layouts so you can get to market without design bottlenecks.</p>
+          <a href="#" class="cta">Get the bundle</a>
+        </div>
+        <div class="card">
+          <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Live preview</div>
+          <div style="margin-top:18px;height:220px;border-radius:16px;background:linear-gradient(135deg,#1e293b,#0f172a);padding:22px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div style="width:120px;height:14px;border-radius:999px;background:rgba(255,255,255,0.5);"></div>
+            <div style="width:220px;height:42px;border-radius:12px;background:rgba(255,255,255,0.12);"></div>
+            <div class="metrics">
+              <div class="metric"><strong>3x</strong><span>Faster</span></div>
+              <div class="metric"><strong>92%</strong><span>Clear</span></div>
+              <div class="metric"><strong>7d</strong><span>Launch</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
