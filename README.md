@@ -1,137 +1,125 @@
-'use client';
+## LaunchKit Studio App
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+LaunchKit is a production-style starter SaaS that combines:
 
-type PageEntry = {
-  id: string;
-  title: string;
-  slug: string;
-  published: boolean;
-  updated_at: string;
-};
+- a landing-page builder SaaS MVP
+- a monetized digital product bundle
+- Stripe checkout hooks and billing scaffolding
+- a live preview/public page route for published content
 
-const fallbackPages: PageEntry[] = [
-  { id: 'demo-1', title: 'Northstar Launch', slug: 'northstar-launch', published: true, updated_at: '2026-10-14' },
-  { id: 'demo-2', title: 'Studio MVP', slug: 'studio-mvp', published: false, updated_at: '2026-10-13' },
-  { id: 'demo-3', title: 'Creator Toolkit', slug: 'creator-toolkit', published: true, updated_at: '2026-10-12' },
-];
+## Current status
 
-export default function DashboardPage() {
-  const [pages, setPages] = useState<PageEntry[]>(fallbackPages);
-  const [loading, setLoading] = useState(true);
+This project is in a strong MVP-ready state for an early-stage founder prototype:
 
-  useEffect(() => {
-    let mounted = true;
+- product marketing landing page
+- dashboard for saved pages
+- builder UI with blocks and live preview
+- public page route for published pages
+- checkout and billing scaffolding
+- digital template bundle for sale
 
-    async function loadPages() {
-      if (!supabase) {
-        if (mounted) setLoading(false);
-        return;
-      }
+## Product direction
 
-      try {
-        const { data, error } = await supabase.from('pages').select('*').order('updated_at', { ascending: false });
-        if (!mounted) return;
-        if (error) {
-          console.error(error);
-          setPages(fallbackPages);
-        } else {
-          setPages((data as PageEntry[]) ?? fallbackPages);
-        }
-      } catch (err) {
-        console.error(err);
-        setPages(fallbackPages);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    }
+### SaaS MVP
 
-    loadPages();
+LaunchKit helps founders create polished launch pages without needing a designer or developer.
 
-    return () => {
-      mounted = false;
-    };
-  }, []);
+Core value proposition:
+- create landing pages from reusable blocks
+- preview changes instantly
+- publish live pages with a unique slug
+- manage subscriptions and billing
 
-  return (
-    <main className="min-h-screen bg-slate-950 p-8 text-white">
-      <div className="mx-auto max-w-6xl">
-        <header className="mb-8 flex items-center justify-between">
-          <div>
-            <div className="text-sm uppercase tracking-[0.2em] text-brand-200">Dashboard</div>
-            <h1 className="mt-2 text-3xl font-bold">Your launch pages</h1>
-          </div>
-          <Link href="/editor" className="rounded-full bg-brand-500 px-4 py-2 font-medium text-white">
-            New page
-          </Link>
-        </header>
+### Digital product bundle
 
-        <div className="mb-8 grid gap-6 md:grid-cols-3">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-            <div className="text-sm text-slate-400">Active projects</div>
-            <div className="mt-3 text-3xl font-bold">{pages.length}</div>
-          </div>
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-            <div className="text-sm text-slate-400">Published</div>
-            <div className="mt-3 text-3xl font-bold">{pages.filter((page) => page.published).length}</div>
-          </div>
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-            <div className="text-sm text-slate-400">Drafts</div>
-            <div className="mt-3 text-3xl font-bold">{pages.filter((page) => !page.published).length}</div>
-          </div>
-        </div>
+The repo also includes a packaged digital product under `products/launchkit-bundle` for Gumroad or Shopify sale. This is useful as a second revenue stream while the SaaS is growing.
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-          <div className="mb-5 flex items-center justify-between">
-            <div className="text-xl font-semibold">Recent pages</div>
-            <Link href="/editor" className="text-sm text-brand-200">Open editor</Link>
-          </div>
+## Repository layout
 
-          {loading ? (
-            <div className="text-slate-300">Loading pages...</div>
-          ) : (
-            <div className="overflow-hidden rounded-xl">
-              <table className="min-w-full text-left text-sm text-slate-200">
-                <thead className="bg-slate-800/70 text-slate-300">
-                  <tr>
-                    <th className="px-4 py-3">Page</th>
-                    <th className="px-4 py-3">Slug</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Preview</th>
-                    <th className="px-4 py-3">Updated</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pages.map((page) => (
-                    <tr key={page.id} className="border-t border-slate-800">
-                      <td className="px-4 py-3 font-medium text-white">{page.title}</td>
-                      <td className="px-4 py-3 text-slate-300">/{page.slug}</td>
-                      <td className="px-4 py-3">
-                        <span className={`rounded-full px-2 py-1 text-xs ${page.published ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-200'}`}>
-                          {page.published ? 'Published' : 'Draft'}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        {page.published ? (
-                          <Link href={`/${page.slug}`} className="text-brand-200 hover:underline">
-                            Open page
-                          </Link>
-                        ) : (
-                          <span className="text-slate-500">Not live</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-slate-300">{page.updated_at}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </div>
-    </main>
-  );
-}
+```text
+.
+├── apps/
+│   └── web/
+│       ├── app/
+│       ├── lib/
+│       └── package.json
+├── products/
+│   └── launchkit-bundle/
+├── supabase/
+│   └── migrations/
+├── .env.local.example
+├── .gitignore
+├── README.md
+├── README_ENV_NOTES.md
+└── package.json
+```
 
+## Run locally
+
+```bash
+npm install
+npm run dev --workspace=apps/web
+```
+
+Then open:
+- http://localhost:3000
+- http://localhost:3000/editor
+- http://localhost:3000/dashboard
+
+## Required environment variables
+
+Copy `.env.local.example` to `.env.local` and add your real values:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_PRICE_ID=
+STRIPE_WEBHOOK_SECRET=
+```
+
+Detailed notes are in `README_ENV_NOTES.md`.
+
+## Database setup
+
+Run the SQL migration in your Supabase project:
+
+```sql
+-- file: supabase/migrations/001_init.sql
+```
+
+This creates:
+- `customers`
+- `subscriptions`
+- `pages`
+
+## Frontend routes
+
+- `/` – product marketing page
+- `/editor` – page builder interface
+- `/dashboard` – page list and preview links
+- `/checkout` – checkout flow
+- `/settings` – billing portal entry point
+- `/:slug` – public landing page route for published pages
+
+## Launch checklist
+
+Before going live:
+
+- create a Supabase project and run the migration
+- configure Stripe product + recurring price
+- set up Stripe webhook forwarding
+- sign in with magic link auth
+- publish one demo landing page
+- create a buyer-facing sales page for your digital bundle
+- deploy to Vercel
+
+## Recommended next step
+
+Use this repo as the foundation for a real founder-facing SaaS MVP and sell the digital bundle while you validate demand.
+
+## License
+
+MIT
