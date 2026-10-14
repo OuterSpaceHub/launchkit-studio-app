@@ -34,7 +34,7 @@ const buildDemoBlocks = (): BuilderBlock[] => [
     id: crypto.randomUUID(),
     type: 'cta',
     heading: 'Ready to launch?',
-    subheading: 'Create your first page this week and start collecting signups.',
+    subheading: 'Create your next product launch page in one afternoon.',
     ctaLabel: 'Book a demo',
     ctaUrl: '/checkout',
   },
@@ -46,6 +46,7 @@ export default function EditorPage() {
   const [blocks, setBlocks] = useState<BuilderBlock[]>(buildDemoBlocks);
   const [message, setMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [published, setPublished] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -105,16 +106,20 @@ export default function EditorPage() {
 
     try {
       const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'untitled-page';
-      const { error } = await supabase.from('pages').insert({
-        user_id: userId,
-        title,
-        slug,
-        blocks,
-        published: false,
-      });
+      const { error } = await supabase.from('pages').upsert(
+        {
+          user_id: userId,
+          title,
+          slug,
+          blocks,
+          published,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'slug' }
+      );
 
       if (error) throw error;
-      setMessage('Page saved successfully.');
+      setMessage(published ? 'Page saved and published.' : 'Page saved successfully.');
     } catch (err: any) {
       setMessage(err.message || 'Unable to save page.');
     } finally {
@@ -125,18 +130,25 @@ export default function EditorPage() {
   return (
     <main className="min-h-screen bg-slate-950 p-6 text-white">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="text-sm uppercase tracking-[0.2em] text-brand-200">Builder</div>
             <h1 className="mt-2 text-3xl font-bold">Page Builder MVP</h1>
           </div>
-          <button
-            onClick={savePage}
-            disabled={isSaving}
-            className="rounded-full bg-brand-500 px-5 py-3 font-medium text-white disabled:opacity-60"
-          >
-            {isSaving ? 'Saving...' : 'Save page'}
-          </button>
+
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200">
+              <input type="checkbox" checked={published} onChange={(e) => setPublished(e.target.checked)} />
+              Publish live
+            </label>
+            <button
+              onClick={savePage}
+              disabled={isSaving}
+              className="rounded-full bg-brand-500 px-5 py-3 font-medium text-white disabled:opacity-60"
+            >
+              {isSaving ? 'Saving...' : 'Save page'}
+            </button>
+          </div>
         </div>
 
         <div className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
